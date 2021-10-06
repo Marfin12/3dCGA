@@ -1,7 +1,10 @@
 # Description
-It is an experimental project to explore 3d modelling &amp; animation.
-Chapter #1 - Cube Rotation in perspective or parallel projection
-Chapter #2 - ...
+It is an experimental project to explore 3d modelling &amp; animation. 
+
+Chapter #1 - Cube Rotation in perspective or parallel projection 
+
+Chapter #2 - ... 
+
 ...
 
 # Setup Instructions
