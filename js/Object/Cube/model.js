@@ -9,6 +9,7 @@
 	  const xEnd = pos.x + cubeLength;
 	  const yEnd = pos.y + cubeLength;
 	  const zEnd = pos.z + cubeLength;
+	  
 	  let point = [];
 
 	  point[0] = [pos.x, pos.y, pos.z, 1];
@@ -27,9 +28,10 @@
 	const xEnd = pos.x + cubeLength;
 	const yEnd = pos.y + cubeLength;
 	const zEnd = pos.z + cubeLength;
-	const xCenter = xEnd - (xEnd - pos.x) / 2;
-	const yCenter = yEnd - (yEnd - pos.y) / 2;
-	const zCenter = zEnd - (zEnd - pos.z) / 2;
+	const xCenter = (xEnd + pos.x) / 2;
+	const yCenter = (yEnd + pos.y) / 2;
+	const zCenter = (zEnd + pos.y) / 2;
+
 	return {
 		xCenter,
 		yCenter,
