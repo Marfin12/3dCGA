@@ -1,30 +1,25 @@
 // require "./Object/index.js";
 
-let assignedCube, canvasWidth, canvasHeight;
+let assignedCube, assignedCamera, canvasWidth, canvasHeight;
 
-function constructCube(ctx, cube, canvas) {
+function constructCube(ctx, cube, canvas, camera) {
 	canvasWidth = canvas.width;
 	canvasHeight = canvas.height;
 	
 	assignedCube = new Cube(ctx, cube.cubePosition, cube.cubeLen);
+	assignedCamera = new Camera(
+		ConvertPropertyToNumber(camera.VRP),
+		ConvertPropertyToNumber(camera.VPN),
+		ConvertPropertyToNumber(camera.VUP),
+		ConvertPropertyToNumber(camera.PRP),
+		ConvertElementArrayToNumber(camera.Window),
+		parseInt(camera.F),
+		parseint(camera.B)
+	)
 }
 
-function rotateCube(angle, isParallel, axisRotation) {
-	switch(axisRotation) {
-		case axisEnum.rotateX:
-			assignedCube.rotateX(angle);
-			break;
-		case axisEnum.rotateY:
-			assignedCube.rotateY(angle);
-			break;
-		case axisEnum.rotateZ:
-			assignedCube.rotateZ(angle);
-			break;
-		default:
-			alert("something wrong");
-	}
-
-	assignedCube.generateWCS();
+function renderHouse(isParallel) {
+	assignedCube.generateWCS(assignedCamera);
 	assignedCube.generateVCS(isParallel);
 	assignedCube.generateScreen(canvasWidth, canvasHeight);
 	assignedCube.draw(canvasWidth, canvasHeight);

@@ -84,13 +84,24 @@ Math.T = function(dx = 0, dy = 0, dz = 0) {
     return MTranz;
 };
 
-Math.converge = function(mat1) {
+Math.T = function(VRP) {
+    var MTranz = new Array();
+
+    setThisMatrix(MTranz, 0, 1, 0, 0, 0);
+    setThisMatrix(MTranz, 1, 0, 1, 0, 0);
+    setThisMatrix(MTranz, 2, 0, 0, 1, 0);
+    setThisMatrix(MTranz, 3, -VRP[0], -VRP[1], -VRP[2], 1);
+
+    return MTranz;
+};
+
+Math.Converge = function(mat1) {
     for (var i=0;i<4;i++) mat1[i] = mat1[i]/mat1[3];
     
     return mat1;
 };
 
-Math.matrixMultiply = function(mat1, mat2) {
+Math.MatrixMultiply4x4 = function(mat1, mat2) {
     var res = [];
 
     for (var i = 0; i < mat1.length; i++) 
@@ -109,7 +120,7 @@ Math.matrixMultiply = function(mat1, mat2) {
     return res;
 };
 
-Math.matrixMultiply1x4 = function(mat1, mat2) {
+Math.MatrixMultiply1x4 = function(mat1, mat2) {
     var res = [];
 
     for (var i=0;i<4;i++) res[i] = 
