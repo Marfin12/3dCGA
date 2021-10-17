@@ -3,14 +3,14 @@
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 const axisEnum = Object.freeze({"rotateX": 1, "rotateY": 2, "rotateZ": 3});
-const cube = {
-	cubePosition: {
+const house = {
+	housePosition: {
 		x:50,
 		y:50,
 		z:50
 	},
-	cubeAngle: 10,
-	cubeLen: 100
+	houseAngle: 10,
+	houseLen: 100
 };
 
 var isParallel = true;
@@ -22,7 +22,7 @@ canvas.height = window.innerHeight-145;
 
 function simulateScene() {
 	camera = getCamera();
-	constructCube(context, cube, canvas, camera);
+	constructhouse(context, house, canvas, camera);
 	renderHouse(isParallel);
 }
 

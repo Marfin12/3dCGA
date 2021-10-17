@@ -1,12 +1,12 @@
 // require "./Object/index.js";
 
-let assignedCube, assignedCamera, canvasWidth, canvasHeight;
+let assignedHouse, assignedCamera, canvasWidth, canvasHeight;
 
-function constructCube(ctx, cube, canvas, camera) {
+function constructHouse(ctx, house, canvas, camera) {
 	canvasWidth = canvas.width;
 	canvasHeight = canvas.height;
 	
-	assignedCube = new Cube(ctx, cube.cubePosition, cube.cubeLen);
+	assignedHouse = new House(ctx, house.housePosition, house.houseLen);
 	assignedCamera = new Camera(
 		ConvertPropertyToNumber(camera.VRP),
 		ConvertPropertyToNumber(camera.VPN),
@@ -19,8 +19,8 @@ function constructCube(ctx, cube, canvas, camera) {
 }
 
 function renderHouse(isParallel) {
-	assignedCube.generateWCS(assignedCamera);
-	assignedCube.generateVCS(isParallel);
-	assignedCube.generateScreen(canvasWidth, canvasHeight);
-	assignedCube.draw(canvasWidth, canvasHeight);
+	assignedHouse.generateWCS(assignedCamera);
+	assignedHouse.generateVCS(isParallel);
+	assignedHouse.generateScreen(canvasWidth, canvasHeight);
+	assignedHouse.draw(canvasWidth, canvasHeight);
 }

@@ -2,16 +2,16 @@
 // require "./model.js";
 // require "../Utils/math.js";
 
-class Cube {
-    constructor(ctx, cubePosition, len) {
+class House {
+    constructor(ctx, housePosition, len) {
         this.ctx = ctx;
         
     	this.point = new Array();
     	this.line = new Array();
 
-        this.point = Point.generateCube(cubePosition, len);
-        this.cubeCenterPosition = Point.getCubeCenterPosition(cubePosition);
-        this.line = Line.generateCube(this.line);
+        this.point = Point.generate(housePosition, len);
+        this.centerPosition = Point.getCenterPosition(housePosition);
+        this.line = Line.generate(this.line);
 
         this.wt = new Array();
     	this.vt = new Array();
@@ -32,7 +32,7 @@ class Cube {
 
     generateVCS(isParallel) {
         this.MView = isParallel ? Math.ParallelVt() : Math.PerspectiveVt();
-        for(var i=0;i<=7;i++) {
+        for(var i=0;i<this.point.length;i++) {
             this.vt[i] = Math.matrixMultiply1x4(this.wt[i], this.MView);
             this.vt[i] = Math.converge(this.vt[i]);
         }
@@ -40,13 +40,13 @@ class Cube {
 
     generateScreen(width, height) {
         this.MScreen = Math.St(width,height);
-        for(var i=0;i<=7;i++) this.st[i] = Math.matrixMultiply1x4(this.vt[i], this.MScreen);
+        for(var i=0;i<this.point.length;i++) this.st[i] = Math.matrixMultiply1x4(this.vt[i], this.MScreen);
     }
 
     draw(width, height) {
         this.ctx.clearRect(0, 0, width, height);
         
-        for(var i=0;i<=11;i++) {
+        for(var i=0;i<this.line.length;i++) {
             let pos = {
                 x1:this.st[this.line[i].p1][0],
                 y1:this.st[this.line[i].p1][1],

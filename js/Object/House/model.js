@@ -11,11 +11,13 @@ class TLine {
 	}
 }
 
-  Point.generateCube = function(pos, len) {
+  Point.generate = function(pos, len) {
 	  cubeLength = len;
 	  const xEnd = pos.x + cubeLength;
 	  const yEnd = pos.y + cubeLength;
 	  const zEnd = pos.z + cubeLength;
+	  const xRoof = (xEnd + pos.x) / 2;
+	  const yRoof = yEnd + 40;
 	  
 	  let point = [];
 
@@ -27,11 +29,13 @@ class TLine {
 	  point[5] = [xEnd, pos.y, zEnd, 1];
 	  point[6] = [xEnd, yEnd, zEnd, 1];
 	  point[7] = [pos.x, yEnd, zEnd, 1];
+	  point[8] = [xRoof, yRoof, pos.z, 1];
+	  point[9] = [xRoof, yRoof, zEnd, 1];
 
 	  return point;
   }
 
-  Point.getCubeCenterPosition = function(pos) {
+  Point.getCenterPosition = function(pos) {
 	const xEnd = pos.x + cubeLength;
 	const yEnd = pos.y + cubeLength;
 	const zEnd = pos.z + cubeLength;
@@ -46,19 +50,21 @@ class TLine {
 	};
 }
   
-  Line.generateCube = function(line) {
+  Line.generate = function(line) {
 	  line[0] = new TLine(0, 1);
 	  line[1] = new TLine(1, 2);
-	  line[2] = new TLine(2, 3);
-	  line[3] = new TLine(3, 0);
-	  line[4] = new TLine(0, 4);
-	  line[5] = new TLine(4, 5);
-	  line[6] = new TLine(5, 1);
-	  line[7] = new TLine(4, 7);
-	  line[8] = new TLine(7, 6);
-	  line[9] = new TLine(6, 5);
-	  line[10] = new TLine(3, 7);
-	  line[11] = new TLine(6, 2);
+	  line[2] = new TLine(3, 0);
+	  line[3] = new TLine(0, 4);
+	  line[4] = new TLine(4, 5);
+	  line[5] = new TLine(5, 1);
+	  line[6] = new TLine(4, 7);
+	  line[7] = new TLine(6, 5);
+	  line[8] = new TLine(3, 7);
+	  line[9] = new TLine(6, 2);
+	  line[10] = new TLine(2, 8);
+	  line[11] = new TLine(8, 3);
+	  line[12] = new TLine(6, 9);
+	  line[13] = new TLine(9, 7);
 
 	  return line;
   }
