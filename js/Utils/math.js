@@ -84,18 +84,29 @@ Math.T = function(dx = 0, dy = 0, dz = 0) {
     return MTranz;
 };
 
-Math.T = function(VRP) {
+Math.T = function(vec) {
     var MTranz = new Array();
 
     setThisMatrix(MTranz, 0, 1, 0, 0, 0);
     setThisMatrix(MTranz, 1, 0, 1, 0, 0);
     setThisMatrix(MTranz, 2, 0, 0, 1, 0);
-    setThisMatrix(MTranz, 3, -VRP[0], -VRP[1], -VRP[2], 1);
+    setThisMatrix(MTranz, 3, vec[0], vec[1], vec[2], 1);
 
     return MTranz;
 };
 
-Math.Converge = function(mat1) {
+Math.S = function(sx = 0, sy = 0, sz = 0) {
+    var MScale = new Array();
+
+    setThisMatrix(MScale, 0, sx, 0, 0, 0);
+    setThisMatrix(MScale, 1, 0, sy, 0, 0);
+    setThisMatrix(MScale, 2, 0, 0, sz, 0);
+    setThisMatrix(MScale, 3, 0, 0, 0, 1);
+
+    return MScale
+}
+
+Math.divideW = function(mat1) {
     for (var i=0;i<4;i++) mat1[i] = mat1[i]/mat1[3];
     
     return mat1;

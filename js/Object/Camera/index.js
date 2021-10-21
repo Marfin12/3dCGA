@@ -7,13 +7,13 @@ class Camera {
         this.Window = Window;
         this.Front = Front;
         this.Back = Back;
-        this.uMaxMin = (this.Window[0] + this.Window[1]) / 2;
-        this.vMaxMin = (this.Window[2] + this.Window[3]) / 2;
+        this.uMaxMin = this.Window[0] + this.Window[1];
+        this.vMaxMin = this.Window[2] + this.Window[3];
     }
 
     translateVRPtoOrigin(cube) {
         var res = [];
-        const TVRP = Math.T(Math.minusVector(-this.VRP));
+        const TVRP = Math.T(Math.minusVector(this.VRP));
 
         for(var i=0;i<cube.length;i++) {
             res[i] = Math.multiplyMatrix1x4(cube[i], TVRP);
@@ -23,14 +23,9 @@ class Camera {
     }
 
     alignVRC(cube) {
-        var n = Math.NormalizeVector(VPN);
-        const nDotVUP = Math.dotProduct(VUP, n);
-
-        var u = Math.SubstractionVector(VUP, nDotVUP);
-        u = Math.NormalizeVector(u);
-
-        var v = Math.crossProduct(n, u);
-        v = Math.NormalizeVector(v);
+        const n = Math.NormalizeVector(VPN);
+        const u = Math.NormalizeVector(Math.crossProduct(VUP, n));
+        const v = Math.crossProduct(n, u);
 
         const RVRC = [
             [u.x, u.y, u.z, 0],
@@ -48,10 +43,10 @@ class Camera {
     }
 
     shearDOP(cube) {
-        const CW = new Vertex(this.uMaxMin, this.vMaxMin, 0);
+        const CW = new Vertex(this.uMaxMin / 2, this.vMaxMin / 2, 0);
         const DOP = Math.SubstractionVector(CW, PRP);
-        const HX = (DOP.x / DOP.z) * -1;
-        const HY = (DOP.y / DOP.z) * -1;
+        const HX = (DOP.x * -1) / DOP.z;
+        const HY = (DOP.y * -1) / DOP.z;
         const TDOP = [
             [1, 0, HX, 0],
             [0, 1, HY, 0],
@@ -70,8 +65,8 @@ class Camera {
     translateToFrontCenter(cube) {
         var res = [];
         const TFRONT = [
-            [1, 0, 0, -this.uMaxMin],
-            [0, 1, 0, -this.vMaxMin],
+            [1, 0, 0, -this.uMaxMin / 2],
+            [0, 1, 0, -this.vMaxMin / 2],
             [0, 0, 1,       -F     ],
             [0, 0, 0,        0     ]
         ];
