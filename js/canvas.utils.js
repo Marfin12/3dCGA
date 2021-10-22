@@ -1,8 +1,8 @@
 // require "./Object/index.js";
 
-let assignedHouse, assignedCamera, canvasWidth, canvasHeight;
+let assignedScene, assignedCamera, canvasWidth, canvasHeight, objects;
 
-function constructHouse(ctx, house, canvas, camera) {
+function constructScene(ctx, house, canvas, camera) {
 	canvasWidth = canvas.width;
 	canvasHeight = canvas.height;
 	
@@ -16,11 +16,17 @@ function constructHouse(ctx, house, canvas, camera) {
 		parseInt(camera.F),
 		parseint(camera.B)
 	)
+	assignedScene = new Scene(ctx, [assignedHouse]);
 }
 
-function renderHouse(isParallel) {
-	assignedHouse.generateWCS(assignedCamera);
-	assignedHouse.generateVCS(isParallel);
-	assignedHouse.generateScreen(canvasWidth, canvasHeight);
-	assignedHouse.draw(canvasWidth, canvasHeight);
+function renderViewVolume() {
+	assignedScene.extend3dToHomogeneous();
+	assignedScene.normalize(camera);
+	assignedScene.goBackTo3dCoordinate();
+	assignedScene.clip3d();
+	assignedScene.goBackExtend3dHomogeneous();
+	assignedScene.performParallelProjection();
+	assignedScene.translateAndScaleDeviceCoordinate();
+	assignedScene.goTo2dCoordinate(canvasWidth, canvasHeight);
+	assignedScene.draw(canvasWidth, canvasHeight);
 }

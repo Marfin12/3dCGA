@@ -9,26 +9,16 @@ const house = {
 		y:50,
 		z:50
 	},
-	houseAngle: 10,
+	houseAngle: 0,
 	houseLen: 100
 };
 
 var isParallel = true;
 
-let scene, axisRotation, camera;
+let scene, camera;
 
 canvas.width = window.innerWidth-15;
 canvas.height = window.innerHeight-145;
-
-function simulateScene() {
-	camera = getCamera();
-	constructhouse(context, house, canvas, camera);
-	renderHouse(isParallel);
-}
-
-function setProjection(isParallel) {
-	this.isParallel = isParallel;
-}
 
 function getCamera() {
 	let camera = {
@@ -63,4 +53,14 @@ function getCamera() {
 	};
 	
 	return camera;
+}
+
+function simulateScene() {
+	camera = getCamera();
+	constructhouse(context, house, canvas, camera);
+	renderViewVolume();
+}
+
+function setProjection(isParallel) {
+	this.isParallel = isParallel;
 }

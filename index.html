@@ -39,16 +39,24 @@
 		<input type="text" id="back" value="-1"> <br><br>
 		<button onclick="setProjection(true)"> parallel </button>
 		<button onclick="setProjection(false)"> perspective </button> <br> <br>
-		<button onclick="pauseScene()"> render </button>
+		<button onclick="simulateScene()"> render </button>
 
-		<!-- A required extension library(relation: outside not inside this bracket)-->
+		<!-- A required extension utility(relation: outside not inside this bracket)-->
+		<script src="js/Utils/converter.js"></script>
+		<script src="js/Utils/matrix.js"></script>
+		<script src="js/Utils/vector.js"></script>
+		<script src="js/Utils/clip.js"></script>
+		<!-- A required extension utility(relation: outside not inside this bracket)-->
+
+		<!-- A required extension object(relation: outside not inside this bracket)-->
+		<script src="js/Object/Camera/index.js"></script>
 		<script src="js/Object/House/model.js"></script>
-		<script src="js/Object/Utils/math.js"></script>
-		<script src="js/Object/House/draw.js"></script>
-		<!-- A required extension library(relation: outside not inside this bracket)-->
+		<script src="js/Object/House/index.js"></script>
+		<!-- A required extension object(relation: outside not inside this bracket)-->
 
 		<!-- Generate object(relation: inside/outside) -->
-		<script src="js/Object/House/index.js"></script>
+		<script src="js/Scene/draw.js"></script>
+		<script src="js/Scene/index.js"></script>
 		<!-- Generate object -->
 
 		<!-- Main Lib -->

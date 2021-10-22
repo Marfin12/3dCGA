@@ -3,101 +3,117 @@
 // require "../Utils/math.js";
 
 class Scene {
-    constructor(ctx, objects, len) {
+    constructor(ctx, objects) {
         this.ctx = ctx;
-        
-    	this.point = new Array();
-    	this.line = new Array();
-
-        this.point = Point.generate(housePosition, len);
-        this.centerPosition = Point.getCenterPosition(housePosition);
-        this.line = Line.generate(this.line);
-
-        this.wt = new Array();
-    	this.vt = new Array();
-    	this.st = new Array();
-
-        this.MView = new Array();
-        this.MScreen = new Array();
-        this.MRot = new Array();
-        this.MVV3DV = new Array();
-
         this.objects = objects;
-        this.objectPoint = new Array();
-        this.objectLine = new Array();
-        this.firstHomogeneous = new Array();
-        this.secondHomogeneous = new Array();
 
-        this.nPar = new Array();
-
-        let index = 0;
-        objects.forEach(function(obj) {
-            obj.points = Point.generate(obj.objPosition, len);
-            obj.lines = Line.geenrate();
-            obj.index = index;
-            index++;
-        });
+        this.homogeneousObject = new Array();
+        this.normalizeObject = new Array();
+        this.vector3d = new Array();
+        this.vt = new Array();
+        this.MVV3DV = new Array();
+        this.renderedAllObjects = new Array();
     }
 
     extend3dToHomogeneous() {
         this.objects.forEach(function(obj) {
+            let collectionPointOfObject = new Array();
+
             obj.points.forEach(function(point) {
-                this.firstHomogeneous[obj.index].push([point[0], point[1], point[2], 1]);
+                collectionPointOfObject.push([point[0], point[1], point[2], 1]);
             })
+
+            this.homogeneousObject.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );
         })
     };
 
     normalize(camera) {
-        let index = 0;
+        this.homogeneousObject(function(obj) {
+            let SPAR = new Array();
 
-        this.firstHomogeneous.forEach(function(objPoint) {
-            const TVRP = camera.translateVRPtoOrigin(objPoint);
-            const RVRC = camera.alignVRC(TVRP);
-            const TDOP = camera.shearDOP(RVRC);
-            const TPAR = camera.translateToFrontCenter(TDOP);
-            this.nPar[index].push(camera.scaleToCannocialVolume(TPAR));
-            index++;
+            obj.points.forEach(function(point) {
+                const TVRP = camera.translateVRPtoOrigin(point);
+                const RVRC = camera.alignVRC(TVRP);
+                const TDOP = camera.shearDOP(RVRC);
+                const TPAR = camera.translateToFrontCenter(TDOP);
+                SPAR.push(camera.scaleToCannocialVolume(TPAR));
+            })
+
+            this.normalizeObject.push(
+                {
+                    points: SPAR,
+                    lines: obj.lines
+                }
+            );
         })
     }
 
     goBackTo3dCoordinate() {
-        let index = 0;
+        this.normalizeObject.forEach(function(obj) {
+            let collectionVectorOfObj = new Array();
 
-        this.nPar.forEach(function(nParPoint) {
-            let res = new Array();
-
-            nParPoint.forEach(function(point) {
-                res.push(Math.ConvertMatrixToVector(Math.divideW(point)));
+            obj.points.forEach(function(point) {
+                collectionMatrixOfObj.push(Math.ConvertMatrixToVector(Math.divideW(point)));
             })
-            objects[index].points = res;
-            index++;
-        });
+
+            this.vector3d.push(
+                {
+                    vectorPoints: collectionVectorOfObj,
+                    lines: obj.lines
+                }
+            );
+        })
     }
 
     clip3d() {
-        this.objects.forEach(function(obj) {
-            obj.lines.forEach(function(ln) {
-                let newClippedLine = Math.cohenShutterland3d(ln, obj.point);
-                obj.point[ln.p1] = newClippedLine.point1;
-                obj.point[ln.p2] = newClippedLine.point2;
+        this.vector3d.forEach(function(obj) {
+            obj.lines.forEach(function(line) {
+                let newClippedLine = Math.cohenShutterland3d(line, obj.vectorPoints);
+                obj.vectorPoints[line.p1] = newClippedLine.point1;
+                obj.vectorPoints[line.p2] = newClippedLine.point2;
             })
         })
     };
 
     goBackExtend3dHomogeneous() {
-        this.objects.forEach(function(obj) {
-            obj.point.forEach(function(point) {
-                this.secondHomogeneous[obj.index].push([point[0], point[1], point[2], 1]);
+        this.homogeneousObject = new Array();
+
+        this.vector3d.forEach(function(obj) {
+            let collectionPointOfObject = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionPointOfObject.push([point[0], point[1], point[2], 1]);
             })
+            
+            this.homogeneousObject.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );
         })
     }
 
     performParallelProjection() {
         this.MView = Math.ParallelVt();
-        this.secondHomogeneous.forEach(function(obj) {
-            for(var i=0;i<obj.point.length;i++) {
-                this.vt[obj.index].points.push(Math.matrixMultiply1x4(obj[i], this.MView));
-            }
+        this.homogeneousObject.forEach(function(obj) {
+            let collectionVTObj = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionVTObj.push(Math.matrixMultiply1x4(obj[point], this.MView));
+            })
+
+            this.vt.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.line
+                }
+            );
         })
     }
 
@@ -109,15 +125,24 @@ class Scene {
         const ZvMAX = camera.F - camera.B;
         const ZvMIN = 0;
         
-        var resTVV = []; 
-        var resSVV3DV = [];
+        var resTVV = new Array(); 
+        var resSVV3DV = new Array();
 
         const TVV = Math.T(XvMIN, YvMIN, ZvMIN);
 
         this.vt.forEach(function(obj) {
-            for(var i=0;i<obj.points.length;i++) {
-                resTVV[i].points.push(Math.multiplyMatrix1x4(obj.points[i], TVV));
-            }
+            let collectionPointObj = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionPointObj.push(Math.multiplyMatrix1x4(point, TVV));
+            })
+
+            resTVV.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );            
         });
 
         const sx = (XvMAX - XvMIN) / 2;
@@ -127,17 +152,35 @@ class Scene {
         const SVV3DV = Math.S(sx, sy, sz);
 
         resTVV.forEach(function(obj) {
-            for(var i=0;i<obj.points.length;i++) {
-                resSVV3DV[i].points.push(Math.multiplyMatrix1x4(obj.points[i], SVV3DV));
-            }
+            let collectionPointObj = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionPointObj.push(Math.multiplyMatrix1x4(point, SVV3DV));
+            })
+
+            resSVV3DV.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );            
         });
 
         const TLLCV = Math.T(1, 1, 1);
 
         resSVV3DV.forEach(function(obj) {
-            for(var i=0;i<obj.points.length;i++) {
-                this.MVV3DV[i].points.push(Math.multiplyMatrix1x4(obj.points[i], TLLCV));
-            }
+            let collectionPointObj = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionPointObj.push(Math.multiplyMatrix1x4(point, TLLCV));
+            })
+
+            this.MVV3DV.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );            
         });
     }
 
@@ -147,27 +190,38 @@ class Scene {
                 point = Math.divideW(point);
             })
         })
-        this.MScreen = Math.St(width, height);
+
+        const MScreen = Math.St(width, height);
+
         this.MVV3DV.forEach(function(obj) {
-            for(var i=0;i<obj.points.length;i++) {
-                this.st[obj.index].push(Math.matrixMultiply1x4(obj.points[i], this.MScreen));
-            }
+            let collectionPointObj = new Array();
+
+            obj.points.forEach(function(point) {
+                collectionPointObj.push(Math.multiplyMatrix1x4(point, MScreen));
+            })
+
+            this.renderedAllObjects.push(
+                {
+                    points: collectionPointOfObject,
+                    lines: obj.lines
+                }
+            );
         })
     }
 
     draw(width, height) {
         this.ctx.clearRect(0, 0, width, height);
-        this.objects.forEach(function(obj) {
-            for(var i=0;i<obj.lines.length;i++) {
+        this.renderedAllObjects.forEach(function(renderedObj) {
+            renderedObj.lines.forEach(function(line) {
                 let pos = {
-                    x1:this.st[obj.index][obj.lines[i].p1][0],
-                    y1:this.st[obj.index][obj.lines[i].p1][1],
-                    x2:this.st[obj.index][obj.lines[i].p2][0],
-                    y2:this.st[obj.index][obj.lines[i].p2][1]
+                    x1: renderedObj[line.p1][0],
+                    y1: renderedObj[line.p1][1],
+                    x2: renderedObj[line.p2][0],
+                    y2: renderedObj[line.p2][1]
                 };
-    
+
                 drawLine(this.ctx,pos,5,"#FFF000");
-            }
+            })
         })
     }
 }
