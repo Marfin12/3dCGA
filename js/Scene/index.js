@@ -16,58 +16,62 @@ class Scene {
     }
 
     extend3dToHomogeneous() {
+        let homogeneousObject = new Array();
+
         this.objects.forEach(function(obj) {
             let collectionPointOfObject = new Array();
 
             obj.points.forEach(function(point) {
                 collectionPointOfObject.push([point[0], point[1], point[2], 1]);
             })
-
-            this.homogeneousObject.push(
+            homogeneousObject.push(
                 {
                     points: collectionPointOfObject,
                     lines: obj.lines
                 }
             );
         })
+        this.homogeneousObject = homogeneousObject;
     };
 
     normalize(camera) {
-        this.homogeneousObject(function(obj) {
-            let SPAR = new Array();
+        let normalizeObject = new Array();
 
-            obj.points.forEach(function(point) {
-                const TVRP = camera.translateVRPtoOrigin(point);
-                const RVRC = camera.alignVRC(TVRP);
-                const TDOP = camera.shearDOP(RVRC);
-                const TPAR = camera.translateToFrontCenter(TDOP);
-                SPAR.push(camera.scaleToCannocialVolume(TPAR));
-            })
+        this.homogeneousObject.forEach(function(obj) {
+            const TVRP = camera.translateVRPtoOrigin(obj.points);
+            const RVRC = camera.alignVRC(TVRP);
+            const TDOP = camera.shearDOP(RVRC);
+            const TPAR = camera.translateToFrontCenter(TDOP);
+            const SPAR = camera.scaleToCannocialVolume(TPAR);
 
-            this.normalizeObject.push(
+            normalizeObject.push(
                 {
                     points: SPAR,
                     lines: obj.lines
                 }
             );
         })
+        this.normalizeObject = normalizeObject;
     }
 
     goBackTo3dCoordinate() {
+        let vector3d = new Array();
+
         this.normalizeObject.forEach(function(obj) {
-            let collectionVectorOfObj = new Array();
+            let collectionMatrixOfObj = new Array();
 
             obj.points.forEach(function(point) {
                 collectionMatrixOfObj.push(Math.ConvertMatrixToVector(Math.divideW(point)));
             })
 
-            this.vector3d.push(
+            vector3d.push(
                 {
-                    vectorPoints: collectionVectorOfObj,
+                    vectorPoints: collectionMatrixOfObj,
                     lines: obj.lines
                 }
             );
         })
+        this.vector3d = vector3d;
     }
 
     clip3d() {
@@ -81,46 +85,51 @@ class Scene {
     };
 
     goBackExtend3dHomogeneous() {
-        this.homogeneousObject = new Array();
+        let homogeneousObject = new Array();
+        console.log(this.vector3d[0].vectorPoints);
 
         this.vector3d.forEach(function(obj) {
             let collectionPointOfObject = new Array();
 
-            obj.points.forEach(function(point) {
-                collectionPointOfObject.push([point[0], point[1], point[2], 1]);
+            obj.vectorPoints.forEach(function(vectorPoint) {
+                collectionPointOfObject.push([vectorPoint.x, vectorPoint.y, vectorPoint.z, 1]);
             })
             
-            this.homogeneousObject.push(
+            homogeneousObject.push(
                 {
                     points: collectionPointOfObject,
                     lines: obj.lines
                 }
             );
         })
+        this.homogeneousObject = homogeneousObject;
     }
 
     performParallelProjection() {
-        this.MView = Math.ParallelVt();
+        const MView = Math.ParallelVt();
+        let vt = new Array();
+
         this.homogeneousObject.forEach(function(obj) {
             let collectionVTObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionVTObj.push(Math.matrixMultiply1x4(obj[point], this.MView));
+                collectionVTObj.push(Math.MatrixMultiply1x4(point, MView));
             })
 
-            this.vt.push(
+            vt.push(
                 {
-                    points: collectionPointOfObject,
-                    lines: obj.line
+                    points: collectionVTObj,
+                    lines: obj.lines
                 }
             );
         })
+        this.vt = vt;
     }
 
-    translateAndScaleDeviceCoordinate(canvas, camera) {
-        const XvMAX = canvas.width;
+    translateAndScaleDeviceCoordinate(canvasWidth, canvasHeight, camera) {
+        const XvMAX = canvasWidth;
         const XvMIN = 0;
-        const YvMAX = canvas.height;
+        const YvMAX = canvasHeight;
         const YvMIN = 0;
         const ZvMAX = camera.F - camera.B;
         const ZvMIN = 0;
@@ -134,12 +143,12 @@ class Scene {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.multiplyMatrix1x4(point, TVV));
+                collectionPointObj.push(Math.MatrixMultiply1x4(point, TVV));
             })
 
             resTVV.push(
                 {
-                    points: collectionPointOfObject,
+                    points: collectionPointObj,
                     lines: obj.lines
                 }
             );            
@@ -155,33 +164,35 @@ class Scene {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.multiplyMatrix1x4(point, SVV3DV));
+                collectionPointObj.push(Math.MatrixMultiply1x4(point, SVV3DV));
             })
 
             resSVV3DV.push(
                 {
-                    points: collectionPointOfObject,
+                    points: collectionPointObj,
                     lines: obj.lines
                 }
             );            
         });
 
         const TLLCV = Math.T(1, 1, 1);
+        let MVV3DV = new Array();
 
         resSVV3DV.forEach(function(obj) {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.multiplyMatrix1x4(point, TLLCV));
+                collectionPointObj.push(Math.MatrixMultiply1x4(point, TLLCV));
             })
 
-            this.MVV3DV.push(
+            MVV3DV.push(
                 {
-                    points: collectionPointOfObject,
+                    points: collectionPointObj,
                     lines: obj.lines
                 }
             );            
         });
+        this.MVV3DV = MVV3DV;
     }
 
     goTo2dCoordinate(width, height) {
@@ -192,35 +203,39 @@ class Scene {
         })
 
         const MScreen = Math.St(width, height);
+        let renderedAllObjects = new Array();
 
         this.MVV3DV.forEach(function(obj) {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.multiplyMatrix1x4(point, MScreen));
+                collectionPointObj.push(Math.MatrixMultiply1x4(point, MScreen));
             })
 
-            this.renderedAllObjects.push(
+            renderedAllObjects.push(
                 {
-                    points: collectionPointOfObject,
+                    points: collectionPointObj,
                     lines: obj.lines
                 }
             );
         })
+        this.renderedAllObjects = renderedAllObjects
     }
 
     draw(width, height) {
-        this.ctx.clearRect(0, 0, width, height);
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, width, height);
         this.renderedAllObjects.forEach(function(renderedObj) {
+            console.log(renderedObj);
             renderedObj.lines.forEach(function(line) {
                 let pos = {
-                    x1: renderedObj[line.p1][0],
-                    y1: renderedObj[line.p1][1],
-                    x2: renderedObj[line.p2][0],
-                    y2: renderedObj[line.p2][1]
+                    x1: renderedObj.points[line.p1][0],
+                    y1: renderedObj.points[line.p1][1],
+                    x2: renderedObj.points[line.p2][0],
+                    y2: renderedObj.points[line.p2][1]
                 };
 
-                drawLine(this.ctx,pos,5,"#FFF000");
+                drawLine(ctx, pos, 5, "#FFF000");
             })
         })
     }
