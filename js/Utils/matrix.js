@@ -84,17 +84,6 @@ Math.T = function(dx = 0, dy = 0, dz = 0) {
     return MTranz;
 };
 
-Math.T = function(vec) {
-    var MTranz = new Array();
-
-    setThisMatrix(MTranz, 0, 1, 0, 0, 0);
-    setThisMatrix(MTranz, 1, 0, 1, 0, 0);
-    setThisMatrix(MTranz, 2, 0, 0, 1, 0);
-    setThisMatrix(MTranz, 3, vec[0], vec[1], vec[2], 1);
-
-    return MTranz;
-};
-
 Math.S = function(sx = 0, sy = 0, sz = 0) {
     var MScale = new Array();
 
