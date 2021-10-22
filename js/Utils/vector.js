@@ -14,7 +14,7 @@ function unitVector(vec) {
     return Math.sqrt(x + y + z);
 };
 
-Math.minusVector = function(vec) {
+Math.MinusVector = function(vec) {
     return new Vertex(-vec.x, -vec.y, -vec.z);
 }
 
@@ -28,14 +28,14 @@ Math.NormalizeVector = function(vec) {
     return new Vertex(vec.x/unitVec, vec.y/unitVec, vec.z/unitVec);
 }
 
-Math.DotProduct = function(up, n) {
-    return (up.x * n.x) + (up.y * n.y) + (up.z * n.z);
+Math.DotProduct = function(vec1, vec2) {
+    return (vec1.x * vec2.x) + (vec1.y * vec2.y) + (vec1.z * vec2.z);
 };
 
-Math.CrossProduct = function(up, n) {
-    var cx = (up.y * n.z) - (up.z * n.y);
-    var cy = (up.z * n.x) - (up.x * n.z);
-    var cz = (up.x * n.y) - (up.y * n.x);
+Math.CrossProduct = function(vec1, vec2) {
+    var cx = (vec1.y * vec2.z) - (vec1.z * vec2.y);
+    var cy = (vec1.z * vec2.x) - (vec1.x * vec2.z);
+    var cz = (vec1.x * vec2.y) - (vec1.y * vec2.x);
 
     return new Vertex(cx, cy, cz);
 };
