@@ -21,16 +21,16 @@ class TLine {
 	  
 	  let point = [];
 
-	  point[0] = [pos.x, pos.y, pos.z, 1];
-	  point[1] = [xEnd, pos.y, pos.z, 1];
-	  point[2] = [xEnd, yEnd, pos.z, 1];
-	  point[3] = [pos.x, yEnd, pos.z, 1];
-	  point[4] = [pos.x, pos.y, zEnd, 1];
-	  point[5] = [xEnd, pos.y, zEnd, 1];
-	  point[6] = [xEnd, yEnd, zEnd, 1];
-	  point[7] = [pos.x, yEnd, zEnd, 1];
-	  point[8] = [xRoof, yRoof, pos.z, 1];
-	  point[9] = [xRoof, yRoof, zEnd, 1];
+	  point[0] = [pos.x, pos.y, pos.z];
+	  point[1] = [xEnd, pos.y, pos.z];
+	  point[2] = [xEnd, yEnd, pos.z];
+	  point[3] = [pos.x, yEnd, pos.z];
+	  point[4] = [pos.x, pos.y, zEnd];
+	  point[5] = [xEnd, pos.y, zEnd];
+	  point[6] = [xEnd, yEnd, zEnd];
+	  point[7] = [pos.x, yEnd, zEnd];
+	  point[8] = [xRoof, yRoof, pos.z];
+	  point[9] = [xRoof, yRoof, zEnd];
 
 	  return point;
   }
