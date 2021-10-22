@@ -8,25 +8,25 @@ function constructScene(ctx, house, canvas, camera) {
 	
 	assignedHouse = new House(ctx, house.housePosition, house.houseLen);
 	assignedCamera = new Camera(
-		ConvertPropertyToNumber(camera.VRP),
-		ConvertPropertyToNumber(camera.VPN),
-		ConvertPropertyToNumber(camera.VUP),
-		ConvertPropertyToNumber(camera.PRP),
-		ConvertElementArrayToNumber(camera.Window),
+		Math.ConvertPropertyToNumber(camera.VRP),
+		Math.ConvertPropertyToNumber(camera.VPN),
+		Math.ConvertPropertyToNumber(camera.VUP),
+		Math.ConvertPropertyToNumber(camera.PRP),
+		Math.ConvertElementArrayToNumber(camera.Window),
 		parseInt(camera.F),
-		parseint(camera.B)
+		parseInt(camera.B)
 	)
 	assignedScene = new Scene(ctx, [assignedHouse]);
 }
 
 function renderViewVolume() {
 	assignedScene.extend3dToHomogeneous();
-	assignedScene.normalize(camera);
+	assignedScene.normalize(assignedCamera);
 	assignedScene.goBackTo3dCoordinate();
 	assignedScene.clip3d();
 	assignedScene.goBackExtend3dHomogeneous();
 	assignedScene.performParallelProjection();
-	assignedScene.translateAndScaleDeviceCoordinate();
+	assignedScene.translateAndScaleDeviceCoordinate(canvasWidth, canvasHeight, assignedCamera);
 	assignedScene.goTo2dCoordinate(canvasWidth, canvasHeight);
 	assignedScene.draw(canvasWidth, canvasHeight);
 }

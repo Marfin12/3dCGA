@@ -23,33 +23,33 @@ canvas.height = window.innerHeight-145;
 function getCamera() {
 	let camera = {
 		VRP: {
-			x: document.getElementById('vrpX').innerHTML,
-			y: document.getElementById('vrpY').innerHTML,
-			z: document.getElementById('vrpZ').innerHTML
+			x: document.getElementById('vrpX').value,
+			y: document.getElementById('vrpY').value,
+			z: document.getElementById('vrpZ').value
 		},
 		VPN: {
-			x: document.getElementById('vpnX').innerHTML,
-			y: document.getElementById('vpnY').innerHTML,
-			z: document.getElementById('vpnZ').innerHTML
+			x: document.getElementById('vpnX').value,
+			y: document.getElementById('vpnY').value,
+			z: document.getElementById('vpnZ').value
 		},
 		VUP: {
-			x: document.getElementById('vupX').innerHTML,
-			y: document.getElementById('vupY').innerHTML,
-			z: document.getElementById('vupZ').innerHTML
+			x: document.getElementById('vupX').value,
+			y: document.getElementById('vupY').value,
+			z: document.getElementById('vupZ').value
 		},
 		PRP: {
-			x: document.getElementById('prpX').innerHTML,
-			y: document.getElementById('prpY').innerHTML,
-			z: document.getElementById('prpZ').innerHTML
+			x: document.getElementById('prpX').value,
+			y: document.getElementById('prpY').value,
+			z: document.getElementById('prpZ').value
 		},
 		Window: [
-			document.getElementById('windowX1').innerHTML,
-			document.getElementById('windowY1').innerHTML,
-			document.getElementById('windowX2').innerHTML,
-			document.getElementById('windowY2').innerHTML
+			document.getElementById('windowX1').value,
+			document.getElementById('windowY1').value,
+			document.getElementById('windowX2').value,
+			document.getElementById('windowY2').value
 		],
-		F: document.getElementById('front').innerHTML,
-		B: document.getElementById('back').innerHTML
+		F: document.getElementById('front').value,
+		B: document.getElementById('back').value
 	};
 	
 	return camera;
@@ -57,7 +57,7 @@ function getCamera() {
 
 function simulateScene() {
 	camera = getCamera();
-	constructhouse(context, house, canvas, camera);
+	constructScene(context, house, canvas, camera);
 	renderViewVolume();
 }
 
