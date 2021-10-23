@@ -38,15 +38,26 @@ class Scene {
         let normalizeObject = new Array();
 
         this.homogeneousObject.forEach(function(obj) {
-            const TVRP = camera.translateVRPtoOrigin(obj.points);
-            const RVRC = camera.alignVRC(TVRP);
-            const TDOP = camera.shearDOP(RVRC);
-            const TPAR = camera.translateToFrontCenter(TDOP);
-            const SPAR = camera.scaleToCannocialVolume(TPAR);
+            const TVRP = camera.translateVRPtoOrigin();
+            const RVRC = camera.alignVRC();
+            const SHPAR = camera.shearDOP();
+            const TPAR = camera.translateToFrontCenter();
+            const SPAR = camera.scaleToCannocialVolume();
+
+            const RVRCxTVRP = Math.MatrixMultiply4x4(RVRC, TVRP);
+            const SHPARxRVRCxTVRP = Math.MatrixMultiply4x4(SHPAR, RVRCxTVRP);
+            const TPARxSHPARxRVRCxTVRP = Math.MatrixMultiply4x4(TPAR, SHPARxRVRCxTVRP);
+            const NPAR = Math.MatrixMultiply4x4(SPAR, TPARxSHPARxRVRCxTVRP);
+
+            let res = new Array();
+
+            obj.points.forEach(function(point) {
+                res.push(Math.MatrixMultiply1x4(point, NPAR));
+            })
 
             normalizeObject.push(
                 {
-                    points: SPAR,
+                    points: res,
                     lines: obj.lines
                 }
             );
@@ -133,66 +144,35 @@ class Scene {
         const YvMIN = 0;
         const ZvMAX = camera.F - camera.B;
         const ZvMIN = 0;
-        
-        var resTVV = new Array(); 
-        var resSVV3DV = new Array();
-
-        const TVV = Math.T(XvMIN, YvMIN, ZvMIN);
-
-        this.vt.forEach(function(obj) {
-            let collectionPointObj = new Array();
-
-            obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.MatrixMultiply1x4(point, TVV));
-            })
-
-            resTVV.push(
-                {
-                    points: collectionPointObj,
-                    lines: obj.lines
-                }
-            );            
-        });
 
         const sx = (XvMAX - XvMIN) / 2;
         const sy = (YvMAX - YvMIN) / 2;
         const sz = ZvMAX - ZvMIN;
 
+        const TVV = Math.T(XvMIN, YvMIN, ZvMIN);
         const SVV3DV = Math.S(sx, sy, sz);
-
-        resTVV.forEach(function(obj) {
-            let collectionPointObj = new Array();
-
-            obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.MatrixMultiply1x4(point, SVV3DV));
-            })
-
-            resSVV3DV.push(
-                {
-                    points: collectionPointObj,
-                    lines: obj.lines
-                }
-            );            
-        });
-
         const TLLCV = Math.T(1, 1, 1);
-        let MVV3DV = new Array();
 
-        resSVV3DV.forEach(function(obj) {
+        const SVV3DVxTLLCV = Math.MatrixMultiply4x4(SVV3DV, TLLCV);
+        const MVV3DV = Math.MatrixMultiply4x4(TVV, SVV3DVxTLLCV);
+        
+        const res = new Array();
+
+        this.vt.forEach(function(obj) {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.MatrixMultiply1x4(point, TLLCV));
+                collectionPointObj.push(Math.MatrixMultiply1x4(point, MVV3DV));
             })
 
-            MVV3DV.push(
+            res.push(
                 {
                     points: collectionPointObj,
                     lines: obj.lines
                 }
             );            
         });
-        this.MVV3DV = MVV3DV;
+        this.MVV3DV = res;
     }
 
     goTo2dCoordinate(width, height) {

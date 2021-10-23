@@ -11,18 +11,11 @@ class Camera {
         this.vMaxMin = this.Window[2] + this.Window[3];
     }
 
-    translateVRPtoOrigin(cube) {
-        var res = [];
-        const TVRP = Math.T(-this.VRP.x, -this.VRP.y, -this.VRP.z);
-
-        for(var i=0;i<cube.length;i++) {
-            res[i] = Math.MatrixMultiply1x4(cube[i], TVRP);
-        }
-
-        return res;
+    translateVRPtoOrigin() {
+        return Math.T(-this.VRP.x, -this.VRP.y, -this.VRP.z);
     }
 
-    alignVRC(cube) {
+    alignVRC() {
         const n = Math.NormalizeVector(this.VPN);
         const u = Math.NormalizeVector(Math.CrossProduct(this.VUP, n));
         const v = Math.CrossProduct(n, u);
@@ -33,37 +26,26 @@ class Camera {
             [n.x, n.y, n.z, 0],
             [0,    0,   0,  1]
         ];
-        var res = [];
 
-        for(var i=0;i<cube.length;i++) {
-            res[i] = Math.MatrixMultiply1x4(cube[i], RVRC);
-        }
-
-        return res;
+        return RVRC;
     }
 
-    shearDOP(cube) {
+    shearDOP() {
         const CW = new Vertex(this.uMaxMin / 2, this.vMaxMin / 2, 0);
         const DOP = Math.SubstractionVector(CW, this.PRP);
         const HX = (DOP.x * -1) / DOP.z;
         const HY = (DOP.y * -1) / DOP.z;
-        const TDOP = [
+        const SHPAR = [
             [1, 0, HX, 0],
             [0, 1, HY, 0],
             [0, 0, 1,  0],
             [0, 0, 0,  1]
         ];
-        var res = [];
 
-        for(var i=0;i<cube.length;i++) {
-            res[i] = Math.MatrixMultiply1x4(cube[i], TDOP);
-        }
-
-        return res;
+        return SHPAR;
     }
 
-    translateToFrontCenter(cube) {
-        var res = [];
+    translateToFrontCenter() {
         const TFRONT = [
             [1, 0, 0, -this.uMaxMin / 2],
             [0, 1, 0, -this.vMaxMin / 2],
@@ -71,14 +53,10 @@ class Camera {
             [0, 0, 0,        0         ]
         ];
 
-        for(var i=0;i<cube.length;i++) {
-            res[i] = Math.MatrixMultiply1x4(cube[i], TFRONT);
-        }
-
-        return res;
+        return TFRONT;
     }
 
-    scaleToCannocialVolume(cube) {
+    scaleToCannocialVolume() {
         const Sx = 2 / (this.Window[1] - this.Window[0]);
         const Sy = 2 / (this.Window[3] - this.Window[2]);
         const Sz = 1 / (this.F - this.B);
@@ -90,13 +68,7 @@ class Camera {
             [0,  0,  0,  1]
         ];
 
-        var res = [];
-
-        for(var i=0;i<cube.length;i++) {
-            res[i] = Math.MatrixMultiply1x4(cube[i], TSPAR);
-        }
-
-        return res;
+        return TSPAR;
     }
 
 }
