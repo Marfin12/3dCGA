@@ -3,15 +3,6 @@
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 const axisEnum = Object.freeze({"rotateX": 1, "rotateY": 2, "rotateZ": 3});
-const house = {
-	housePosition: {
-		x:50,
-		y:50,
-		z:50
-	},
-	houseAngle: 0,
-	houseLen: 100
-};
 
 var isParallel = true;
 
@@ -37,10 +28,10 @@ function getCamera() {
 			y: document.getElementById('vupY').value,
 			z: document.getElementById('vupZ').value
 		},
-		PRP: {
-			x: document.getElementById('prpX').value,
-			y: document.getElementById('prpY').value,
-			z: document.getElementById('prpZ').value
+		COP: {
+			x: document.getElementById('copX').value,
+			y: document.getElementById('copY').value,
+			z: document.getElementById('copZ').value
 		},
 		Window: [
 			document.getElementById('windowX1').value,
@@ -57,7 +48,7 @@ function getCamera() {
 
 function simulateScene() {
 	camera = getCamera();
-	constructScene(context, house, canvas, camera);
+	constructScene(context, canvas, camera);
 	renderViewVolume();
 }
 
