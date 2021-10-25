@@ -2,16 +2,16 @@
 
 let assignedScene, assignedCamera, canvasWidth, canvasHeight, objects;
 
-function constructScene(ctx, house, canvas, camera) {
+function constructScene(ctx, canvas, camera) {
 	canvasWidth = canvas.width;
 	canvasHeight = canvas.height;
 	
-	assignedHouse = new House(ctx, house.housePosition, house.houseLen);
+	assignedHouse = new House(ctx);
 	assignedCamera = new Camera(
 		Math.ConvertPropertyToNumber(camera.VRP),
 		Math.ConvertPropertyToNumber(camera.VPN),
 		Math.ConvertPropertyToNumber(camera.VUP),
-		Math.ConvertPropertyToNumber(camera.PRP),
+		Math.ConvertPropertyToNumber(camera.COP),
 		Math.ConvertElementArrayToNumber(camera.Window),
 		parseInt(camera.F),
 		parseInt(camera.B)
