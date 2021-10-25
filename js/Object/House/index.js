@@ -3,9 +3,9 @@
 // require "../Utils/math.js";
 
 class House {
-    constructor(ctx, housePosition, len) {
+    constructor(ctx) {
         this.ctx = ctx;
-        this.points = Point.generateHouse(housePosition, len);
+        this.points = Point.generateHouse();
         this.lines = Line.generateHouse();
     }
 }

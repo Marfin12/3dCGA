@@ -11,26 +11,19 @@ class TLine {
 	}
 }
 
-  Point.generateHouse = function(pos, len) {
-	  cubeLength = len;
-	  const xEnd = pos.x + cubeLength;
-	  const yEnd = pos.y + cubeLength;
-	  const zEnd = pos.z + cubeLength;
-	  const xRoof = (xEnd + pos.x) / 2;
-	  const yRoof = yEnd + 40;
-	  
-	  let point = [];
+  Point.generateHouse = function() {
+	  let point = {};
 
-	  point[0] = [pos.x, pos.y, pos.z];
-	  point[1] = [xEnd, pos.y, pos.z];
-	  point[2] = [xEnd, yEnd, pos.z];
-	  point[3] = [pos.x, yEnd, pos.z];
-	  point[4] = [pos.x, pos.y, zEnd];
-	  point[5] = [xEnd, pos.y, zEnd];
-	  point[6] = [xEnd, yEnd, zEnd];
-	  point[7] = [pos.x, yEnd, zEnd];
-	  point[8] = [xRoof, yRoof, pos.z];
-	  point[9] = [xRoof, yRoof, zEnd];
+	  point.A = [-1, -1, 1];
+	  point.B = [1, -1, 1];
+	  point.C = [1, 0, 1];
+	  point.D = [0, 1, 1];
+	  point.E = [-1, 0, 1];
+	  point.F = [-1, -1, -1];
+	  point.G = [1, -1, -1];
+	  point.H = [1, 0, -1];
+	  point.I = [0, 1, -1];
+	  point.J = [-1, 0, -1];
 
 	  return point;
   }
@@ -53,20 +46,19 @@ class TLine {
   Line.generateHouse = function() {
 	  let line = new Array();
 
-	  line[0] = new TLine(0, 1);
-	  line[1] = new TLine(1, 2);
-	  line[2] = new TLine(3, 0);
-	  line[3] = new TLine(0, 4);
-	  line[4] = new TLine(4, 5);
-	  line[5] = new TLine(5, 1);
-	  line[6] = new TLine(4, 7);
-	  line[7] = new TLine(6, 5);
-	  line[8] = new TLine(3, 7);
-	  line[9] = new TLine(6, 2);
-	  line[10] = new TLine(2, 8);
-	  line[11] = new TLine(8, 3);
-	  line[12] = new TLine(6, 9);
-	  line[13] = new TLine(9, 7);
+	  line[0] = new TLine('A', 'B');
+	  line[1] = new TLine('B', 'C');
+	  line[2] = new TLine('C', 'D');
+	  line[3] = new TLine('D', 'E');
+
+	  line[4] = new TLine('B', 'G');
+	  line[5] = new TLine('G', 'F');
+	  line[6] = new TLine('F', 'A');
+
+	  line[7] = new TLine('F', 'J');
+	  line[8] = new TLine('J', 'I');
+	  line[9] = new TLine('I', 'H');
+	  line[10] = new TLine('H', 'G');
 
 	  return line;
   }
