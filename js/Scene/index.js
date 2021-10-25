@@ -21,13 +21,14 @@ class Scene {
         this.objects.forEach(function(obj) {
             let collectionPointOfObject = new Array();
 
-            obj.points.forEach(function(point) {
-                collectionPointOfObject.push([point[0], point[1], point[2], 1]);
-            })
+            for(var point in obj.points) {
+                collectionPointOfObject.push([obj.points[point][0], obj.points[point][1], obj.points[point][2], 1]);
+            }
+
             homogeneousObject.push(
                 {
                     points: collectionPointOfObject,
-                    lines: obj.lines
+                    lines: Math.ConvertLineKeyToIndex(obj.lines)
                 }
             );
         })
@@ -97,7 +98,6 @@ class Scene {
 
     goBackExtend3dHomogeneous() {
         let homogeneousObject = new Array();
-        console.log(this.vector3d[0].vectorPoints);
 
         this.vector3d.forEach(function(obj) {
             let collectionPointOfObject = new Array();
