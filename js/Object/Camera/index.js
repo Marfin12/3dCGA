@@ -1,14 +1,14 @@
 class Camera {
-    constructor(VRP, VPN, VUP, PRP, Window, Front, Back) {
+    constructor(VRP, VPN, VUP, COP, Window, Front, Back) {
         this.VRP = VRP;
         this.VPN = VPN;
         this.VUP = VUP;
-        this.PRP = PRP;
+        this.COP = COP;
         this.Window = Window;
         this.F = Front;
         this.B = Back;
-        this.uMaxMin = this.Window[0] + this.Window[1];
-        this.vMaxMin = this.Window[2] + this.Window[3];
+        this.uMaxMin = this.Window[2] + this.Window[0];
+        this.vMaxMin = this.Window[3] + this.Window[1];
     }
 
     translateVRPtoOrigin() {
@@ -16,9 +16,13 @@ class Camera {
     }
 
     alignVRC() {
+        const up = Math.NormalizeVector(this.VUP);
+
         const n = Math.NormalizeVector(this.VPN);
-        const u = Math.NormalizeVector(Math.CrossProduct(this.VUP, n));
-        const v = Math.CrossProduct(n, u);
+        const upDotN = Math.DotProduct(up, n);
+        const upDotNTimesN = new Vertex(upDotN * n.x, upDotN * n.y, upDotN * n.z);
+        const v = Math.NormalizeVector(Math.SubstractionVector(up, upDotNTimesN));
+        const u = Math.CrossProduct(v, n);
 
         const RVRC = [
             [u.x, u.y, u.z, 0],
@@ -32,7 +36,7 @@ class Camera {
 
     shearDOP() {
         const CW = new Vertex(this.uMaxMin / 2, this.vMaxMin / 2, 0);
-        const DOP = Math.SubstractionVector(CW, this.PRP);
+        const DOP = Math.SubstractionVector(CW, this.COP);
         const HX = (DOP.x * -1) / DOP.z;
         const HY = (DOP.y * -1) / DOP.z;
         const SHPAR = [
@@ -57,8 +61,8 @@ class Camera {
     }
 
     scaleToCannocialVolume() {
-        const Sx = 2 / (this.Window[1] - this.Window[0]);
-        const Sy = 2 / (this.Window[3] - this.Window[2]);
+        const Sx = 2 / (this.Window[2] - this.Window[0]);
+        const Sy = 2 / (this.Window[3] - this.Window[1]);
         const Sz = 1 / (this.F - this.B);
 
         const TSPAR = [
