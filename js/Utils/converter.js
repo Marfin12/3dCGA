@@ -25,3 +25,13 @@ Math.ConvertElementArrayToNumber = function(arr) {
 Math.ConvertArrayToVector = function(arr) {
     return new Vertex(arr[0], arr[1], arr[2])
 }
+
+Math.ConvertLineKeyToIndex = function(Lines) {
+    let lineRes = new Array();
+
+    Lines.forEach(function(line) {
+        lineRes.push(new TLine(line.p1.charCodeAt(0) - 65, line.p2.charCodeAt(0) - 65));
+    })
+
+    return lineRes;
+}
