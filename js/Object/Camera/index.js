@@ -34,15 +34,25 @@ class Camera {
         return RVRC;
     }
 
+    translateCOPtoOrigin() {
+        const TCOP = [
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1,  0],
+            [-this.COP.x, -this.COP.y, -this.COP.z,  1]
+        ];
+        return TCOP;
+    }
+
     shearDOP() {
         const CW = new Vertex(this.uMaxMin / 2, this.vMaxMin / 2, 0);
         const DOP = Math.SubstractionVector(CW, this.COP);
         const HX = (DOP.x * -1) / DOP.z;
         const HY = (DOP.y * -1) / DOP.z;
         const SHPAR = [
-            [1, 0, HX, 0],
-            [0, 1, HY, 0],
-            [0, 0, 1,  0],
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [HX, HY, 1,  0],
             [0, 0, 0,  1]
         ];
 
@@ -50,29 +60,45 @@ class Camera {
     }
 
     translateToFrontCenter() {
-        const TFRONT = [
-            [1, 0, 0, -this.uMaxMin / 2],
-            [0, 1, 0, -this.vMaxMin / 2],
-            [0, 0, 1,      -this.F     ],
-            [0, 0, 0,        0         ]
-        ];
-
-        return TFRONT;
+        return Math.T(-(this.uMaxMin / 2), -(this.vMaxMin / 2), -this.F);
     }
 
-    scaleToCannocialVolume() {
+    scaleToCannocialVolumeParallel() {
         const Sx = 2 / (this.Window[2] - this.Window[0]);
         const Sy = 2 / (this.Window[3] - this.Window[1]);
         const Sz = 1 / (this.F - this.B);
 
-        const TSPAR = [
-            [Sx, 0,  0,  0],
-            [0,  Sy, 0,  0],
-            [0,  0,  Sz, 0],
-            [0,  0,  0,  1]
+        return Math.S(Sx, Sy, Sz);
+    }
+
+    scaleToCannocialVolumePerspective() {
+        const w = ((this.COP.z - this.B) * (this.Window[2] - this.Window[0])) / (2 * this.COP.z);
+        const h = ((this.COP.z - this.B) * (this.Window[3] - this.Window[1])) / (2 * this.COP.z);
+        const BP = this.B - this.COP.z;
+
+        const Sx = 1 / w;
+        const Sy = 1 / h;
+        const Sz = 1 / BP;
+
+        return Math.S(Sx, Sy, Sz);
+    }
+
+    translateVPbackToZ0() {
+        const VP = this.COP.z / (this.B - this.COP.z);
+        const TVPZ0 = [
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1,  -VP],
+            [0, 0, 0,  1]
         ];
 
-        return TSPAR;
+        return TVPZ0;
+    }
+
+    scaleVMax() {
+        const vMax = (this.COP.z - this.B) / this.COP.z;
+
+        return Math.S(vMax, vMax, 1);
     }
 
 }

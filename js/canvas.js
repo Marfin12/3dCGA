@@ -49,7 +49,7 @@ function getCamera() {
 function simulateScene() {
 	camera = getCamera();
 	constructScene(context, canvas, camera);
-	renderViewVolume();
+	renderViewVolume(this.isParallel);
 }
 
 function setProjection(isParallel) {
