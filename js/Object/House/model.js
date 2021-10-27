@@ -56,10 +56,14 @@ class TLine {
 	  line[6] = new TLine('G', 'F');
 	  line[7] = new TLine('F', 'A');
 
-	  line[8] = new TLine('F', 'J');
-	  line[9] = new TLine('J', 'I');
-	  line[10] = new TLine('I', 'H');
-	  line[11] = new TLine('H', 'G');
+	  line[8] = new TLine('E', 'J');
+	  line[9] = new TLine('D', 'I');
+	  line[10] = new TLine('C', 'H');
+
+	  line[11] = new TLine('F', 'J');
+	  line[12] = new TLine('J', 'I');
+	  line[13] = new TLine('I', 'H');
+	  line[14] = new TLine('H', 'G');
 
 	  return line;
   }
