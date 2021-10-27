@@ -10,7 +10,7 @@ Math.ConvertPropertyToNumber = function(obj) {
     var res = {};
 
     for (const property in obj) {
-        res[property] = parseInt(obj[property]);
+        res[property] = parseFloat(obj[property]);
     }
 
     return res;
@@ -18,7 +18,7 @@ Math.ConvertPropertyToNumber = function(obj) {
 
 Math.ConvertElementArrayToNumber = function(arr) {
     return arr.map(function(element) {
-        return parseInt(element);
+        return parseFloat(element);
     })
 }
 
