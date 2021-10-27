@@ -44,8 +44,8 @@ Math.ParallelVt = function() {
     var MRotx = new Array();
 
     setThisMatrix(MRotx, 0, 1, 0, 0, 0);
-    setThisMatrix(MRotx, 1, 0, -1, 0, 0);
-    setThisMatrix(MRotx, 2, 0, 0, 1, 0);
+    setThisMatrix(MRotx, 1, 0, 1, 0, 0);
+    setThisMatrix(MRotx, 2, 0, 0, 0, 0);
     setThisMatrix(MRotx, 3, 0, 0, 0, 1);
 
     return MRotx;
@@ -56,8 +56,8 @@ Math.PerspectiveVt = function(copZ, B) {
     const COPz = copZ / (copZ - B);
 
     setThisMatrix(MRotx, 0, 1, 0, 0, 0);
-    setThisMatrix(MRotx, 1, 0, -1, 0, 0);
-    setThisMatrix(MRotx, 2, 0, 0, 1, -1 / (COPz));
+    setThisMatrix(MRotx, 1, 0, 1, 0, 0);
+    setThisMatrix(MRotx, 2, 0, 0, 0, -1 / (COPz));
     setThisMatrix(MRotx, 3, 0, 0, 0, 1);
 
     return MRotx;
@@ -67,7 +67,7 @@ Math.St = function(w,h) {
     var MRotx = new Array();
 
     setThisMatrix(MRotx, 0, 100, 0, 0, 0);
-    setThisMatrix(MRotx, 1, 0, 100, 0, 0);
+    setThisMatrix(MRotx, 1, 0, -100, 0, 0);
     setThisMatrix(MRotx, 2, 0, 0, 0, 0);
     setThisMatrix(MRotx, 3, w/2, h/2, 0, 1);
 
