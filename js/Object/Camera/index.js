@@ -47,8 +47,8 @@ class Camera {
     shearDOP() {
         const CW = new Vertex(this.uMaxMin / 2, this.vMaxMin / 2, 0);
         const DOP = Math.SubstractionVector(CW, this.COP);
-        const HX = (DOP.x * -1) / DOP.z;
-        const HY = (DOP.y * -1) / DOP.z;
+        const HX = -DOP.x / DOP.z;
+        const HY = -DOP.y / DOP.z;
         const SHPAR = [
             [1, 0, 0, 0],
             [0, 1, 0, 0],
@@ -84,7 +84,8 @@ class Camera {
     }
 
     translateVPbackToZ0() {
-        const VP = this.COP.z / (this.B - this.COP.z);
+        const testZ = this.COP.z + 1;
+        const VP = testZ / (this.B - testZ);
         const TVPZ0 = [
             [1, 0, 0, 0],
             [0, 1, 0, 0],
