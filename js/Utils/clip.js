@@ -7,19 +7,19 @@ const REGION_BETWEEN_NEAR_FAR = {
 };
 
 const REGION_IN_FRONT_OF_NEAR = {
-    MIDDLE: 16,
-    LEFT: 17,
-    RIGHT: 18,
-    BOTTOM: 20,
-    TOP: 24
+    MIDDLE: 0,
+    LEFT: 1,
+    RIGHT: 2,
+    BOTTOM: 4,
+    TOP: 8
 };
 
 const REGION_BEHIND_OF_FAR = {
-    MIDDLE: 32,
-    LEFT: 33,
-    RIGHT: 34,
-    BOTTOM: 36,
-    TOP: 40
+    MIDDLE: 0,
+    LEFT: 1,
+    RIGHT: 2,
+    BOTTOM: 4,
+    TOP: 8
 };
 
 const XMAX = 1;
@@ -88,7 +88,6 @@ function clippingIntersection3d(codeArea, region, point1, point2) {
 
 Math.cohenShutterland3d = function(line, point, window, front, back) {
     const clippedLine = { point1: point[line.p1], point2: point[line.p2], intersectionStatus: 0 };
-    console.log(clippedLine);
 
     let codeArea1 = determineCodeArea(clippedLine.point1, window, front, back);
     let codeArea2 = determineCodeArea(clippedLine.point2, window, front, back);
@@ -112,10 +111,10 @@ Math.cohenShutterland3d = function(line, point, window, front, back) {
 
             if (codeArea1 !== 0) {
                 clippedLine.point1 = clippedPoint;
-                codeArea1 = determineCodeArea(point1, window, front, back);
+                codeArea1 = determineCodeArea(clippedPoint, window, front, back);
             } else {
                 clippedLine.point2 = clippedPoint;
-                codeArea2 = determineCodeArea(point2, window, front, back);
+                codeArea2 = determineCodeArea(clippedPoint, window, front, back);
             }
         }
     }

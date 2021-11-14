@@ -98,23 +98,22 @@ function normalizePerspective(camera, homogeneousObject) {
 
             obj.lines.forEach(function(line, index, object) {
                 let newClippedLine = Math.cohenShutterland3d(line, C6, camera.Window, camera.F, camera.B);
-                
                 if (newClippedLine.intersectionStatus == 0) {
                     newLine.push(new TLine(line.p1, line.p2));
                 }
                 else if (newClippedLine.intersectionStatus == 2) {
-                    if (newClippedLine.point1 !== obj.point[line.p1] && newClippedLine.point1 !== obj.point[line.p2]) {
-                        obj.point.push(newClippedLine.point1);
-                        obj.point.push(newClippedLine.point2);
-                        newLine.push(new TLine(obj.point.length - 2, obj.point.length - 1));
+                    if (newClippedLine.point1 !== obj.points[line.p1] && newClippedLine.point1 !== obj.points[line.p2]) {
+                        obj.points.push(newClippedLine.point1);
+                        obj.points.push(newClippedLine.point2);
+                        newLine.push(new TLine(obj.points.length - 2, obj.points.length - 1));
                     }
                     else if (newClippedLine.point1 !== obj.point[line.p1]) {
-                        obj.point.push(newClippedLine.point1);
-                        newLine.push(new TLine(obj.point.length - 1, line.p2));
+                        obj.points.push(newClippedLine.point1);
+                        newLine.push(new TLine(obj.points.length - 1, line.p2));
                     }
                     else if (newClippedLine.point2 !== obj.point[line.p2]) {
-                        obj.point.push(newClippedLine.point2);
-                        newLine.push(new TLine(line.p1, obj.point.length - 1));
+                        obj.points.push(newClippedLine.point2);
+                        newLine.push(new TLine(line.p1, obj.points.length - 1));
                     }
                 }
             })

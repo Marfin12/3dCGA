@@ -11,6 +11,8 @@ let scene, camera;
 canvas.width = window.innerWidth-15;
 canvas.height = window.innerHeight-145;
 
+document.getElementById("parallel").style.background='#FFF321';
+
 function getCamera() {
 	let camera = {
 		VRP: {
@@ -54,4 +56,11 @@ function simulateScene() {
 
 function setProjection(isParallel) {
 	this.isParallel = isParallel;
+	if (isParallel) {
+		document.getElementById("parallel").style.background='#FFF321';
+		document.getElementById("perspective").style.background='#eeeeee';
+	} else {
+		document.getElementById("perspective").style.background='#FFF321';
+		document.getElementById("parallel").style.background='#eeeeee';
+	}
 }
