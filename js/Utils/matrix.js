@@ -63,11 +63,11 @@ Math.PerspectiveVt = function(copZ, B) {
     return MRotx;
 };
 
-Math.St = function(w,h) {
+Math.St = function(w,h, sx, sy) {
     var MRotx = new Array();
 
-    setThisMatrix(MRotx, 0, 100, 0, 0, 0);
-    setThisMatrix(MRotx, 1, 0, -100, 0, 0);
+    setThisMatrix(MRotx, 0, sx, 0, 0, 0);
+    setThisMatrix(MRotx, 1, 0, -sy, 0, 0);
     setThisMatrix(MRotx, 2, 0, 0, 0, 0);
     setThisMatrix(MRotx, 3, w/2, h/2, 0, 1);
 

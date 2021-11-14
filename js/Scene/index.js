@@ -53,15 +53,21 @@ class Scene {
             })
         })
 
-        const MScreen = Math.St(width, height);
+        const MScreen = Math.St(width, height, 200, 200);
+        const MWindow = Math.St(width, height, 100, 100);
+
         let renderedAllObjects = new Array();
+        let once = true;
 
         this.vt.forEach(function(obj) {
             let collectionPointObj = new Array();
 
             obj.points.forEach(function(point) {
-                collectionPointObj.push(Math.MatrixMultiply1x4(point, MScreen));
+                if (once) collectionPointObj.push(Math.MatrixMultiply1x4(point, MScreen));
+                else collectionPointObj.push(Math.MatrixMultiply1x4(point, MWindow));
             })
+
+            once = false;
 
             renderedAllObjects.push(
                 {

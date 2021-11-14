@@ -84,7 +84,7 @@ class Camera {
     }
 
     translateVPbackToZ0() {
-        const testZ = this.COP.z + 1;
+        const testZ = this.COP.z + 500;
         const VP = testZ / (this.B - testZ);
         const TVPZ0 = [
             [1, 0, 0, 0],
