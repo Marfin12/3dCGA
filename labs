@@ -1,0 +1,36 @@
+const region = {
+    MIDDLE: 0,
+    LEFT: 1,
+    RIGHT: 2,
+    BOTTOM: 4,
+    TOP: 8
+};
+
+let codeArea = 2;
+
+/*if (point.x < window[0]) res |= SELECTED_REGION.LEFT;
+    else if (point.x > window[2]) res |= SELECTED_REGION.RIGHT;
+
+    if (point.y < window[1]) res |= SELECTED_REGION.BOTTOM;
+    else if (point.y > window[3]) res |= SELECTED_REGION.TOP;*/
+
+console.log(codeArea.toString(2));
+
+console.log(region.RIGHT.toString(2))
+
+if ((codeArea & region.TOP)) {
+    	console.log('top')
+    } else if (codeArea & region.BOTTOM) {
+        console.log('bottom')
+    } else if (codeArea & region.RIGHT) {
+        console.log('right')
+    } else if (codeArea & region.LEFT) {
+        console.log('left');
+    } else if (region.REGION_IN_FRONT_OF_NEAR) {
+        console.log('front');
+    } else if (region.REGION_BETWEEN_NEAR_FAR) {
+        console.log('back');
+      console.log(region.REGION_BETWEEN_NEAR_FAR.toString(2))
+    } else {
+     	console.log('accepted'); 
+    }
